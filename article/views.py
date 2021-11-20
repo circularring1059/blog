@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 
 from django.contrib.auth.models import User
+
+from comment.models import Comment
 from .forms import ArticlePostForm
 from django.core.paginator import Paginator
 
@@ -37,6 +39,8 @@ def article_list(request):
 
 
 def article_detail(request, id):
+    #获取评论
+    comments = Comment.objects.filter(article=id)
     article = ArticlePost.objects.get(id=id)
     article.body = markdown.markdown(article.body,
     extensions=[
