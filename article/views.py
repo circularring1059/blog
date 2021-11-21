@@ -10,7 +10,7 @@ from comment.models import Comment
 from .forms import ArticlePostForm
 from django.core.paginator import Paginator
 
-from .models import ArticlePost
+from .models import ArticlePost, ArticleColumn
 
 import markdown
 def article_list(request):
@@ -60,14 +60,17 @@ def article_create(request):
             #先不commit,要加user
             new_article = article_post_form.save(commit=False)
             new_article.auth = User.objects.get(id=1)
+            #关联栏目
+            if request.POST.get('column'):
+                new_article.column = ArticleColumn.objects.get(id=request.POST.get('column'))
             new_article.save()
             return redirect("article:article_list")
         else:
             return HttpResponse("提交有误，请重试")
 
     else:
-        article_post_form = ArticlePostForm()
-
+        # article_post_form = ArticlePostForm()
+        columns = ArticleColumn.objects.all()
         return render(request, 'article/create.html', locals())
 
 
@@ -86,6 +89,10 @@ def article_update(request,id):
     if request.method == "POST":
         article_post_form = ArticlePostForm(data=request.POST)
         if article_post_form.is_valid():
+            if request.POST['column'] != 'none':
+                article.column = ArticleColumn.objects.get(id=request.POST['column'])
+            else:
+                article.column = None
             article.title = request.POST.get("title")
             article.body = request.POST.get("body")
             article.save()
@@ -95,6 +102,7 @@ def article_update(request,id):
 
     else:
         article_post_form = ArticlePostForm()
+        columns = ArticleColumn.objects.all()
         return render(request, "article/update.html", locals())
 
 
