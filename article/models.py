@@ -5,6 +5,8 @@ from django.urls import reverse
 
 from django.utils import timezone
 
+from mptt.models import MPTTModel, TreeForeignKey
+
 
 class ArticleColumn(models.Model):
     title = models.CharField(max_length=100, blank=True)
@@ -22,11 +24,11 @@ class ArticlePost(models.Model):
     update = models.DateTimeField(auto_now=True)
     total_views = models.PositiveIntegerField(default=9)
 
-    #文章栏目，外键
+    # 文章栏目，外键
     column = models.ForeignKey(
         ArticleColumn,
-        null = True,
-        blank = True,
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name='article'
     )
@@ -37,12 +39,8 @@ class ArticlePost(models.Model):
     def __str__(self):
         return self.title
 
-
     def get_absolute_url(self):
         return reverse('article:article_detail', args=[self.id])
-
-
-
 
 
 

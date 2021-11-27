@@ -6,7 +6,8 @@ from django.http import HttpResponse
 
 from django.contrib.auth.models import User
 
-from comment.models import Comment
+from comment.models import MultipyComment
+from comment.forms import CommentForm
 from .forms import ArticlePostForm
 from django.core.paginator import Paginator
 
@@ -39,8 +40,9 @@ def article_list(request):
 
 
 def article_detail(request, id):
+    comment_form = CommentForm()
     #获取评论
-    comments = Comment.objects.filter(article=id)
+    comments = MultipyComment.objects.filter(article=id)
     article = ArticlePost.objects.get(id=id)
     article.body = markdown.markdown(article.body,
     extensions=[
@@ -51,7 +53,7 @@ def article_detail(request, id):
     article.total_views += 1
     article.save(update_fields=['total_views'])
     return render(request, 'article/detail.html', locals())
-
+    # return HttpResponse("200")
 #forms
 def article_create(request):
     if request.method == "POST":

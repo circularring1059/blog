@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'comment',
     'taggit',
     'ckeditor',
+    'mptt',
 ]
 
 MIDDLEWARE = [
@@ -127,3 +128,22 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
 )
+
+CKEDITOR_CONFIGS = {
+    'default':{
+        "width":'auto',
+        'height': '250px',
+        'tabSpaces': 4,
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Smiley', 'CodeSnippet',],
+            ['Bold', 'Italic', 'Underline', 'RemoveFormat', 'Blockquote'],
+            ['TextColor','BGColor'],
+            ['Link', 'Unlink'],
+            ['NumberedList', 'BulletedList'],
+            ['Maximize']
+        ],
+        # 'extraPlugins': ','.join(['codesnippet']),
+        'extraPlugins': ','.join(['codesnippet'])
+    }
+}
